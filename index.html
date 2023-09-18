@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random-Qoutes Generator</title>
+    <link rel="stylesheet" href="style.css">
+      <script src="https://kit.fontawesome.com/5bb662974d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="wrapper">
+       <header>Daily Quotes</header>
+        <div class="content">
+            <div class="quote-area">
+                <i class="fas fa-quote-left"></i>
+<p class="quote">Allah is sufficient for those that believe in Him.</p                >
+                <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="author">
+                <span>__</span>
+                <span class="name">Qur,an verse</span>
+            </div>
+        </div>
+        <div class="buttons">
+            <div class="features">
+                <ul>
+                <li class="sound"><i class="fa fa-volume-up"></i></li>
+                <li class="copy"><i class="fa fa-copy"></i></li>
+                <li class="facebook"><a href="facebook.com"><i class="fa fa-facebook ff"></i></a></li>   
+                </ul>
+
+           </div>    
+        <button class="new-quote">Generate New Quote</button>
+
+        </div>
+    </div>
+ 
+    <script>
+        const quoteText = document.querySelector(".quote");
+        const quoteAuthor = document.querySelector(".author .name");
+        const quoteBtn = document.querySelector("button");
+
+        const soundBtn = document.querySelector(".sound");
+        const copyBtn = document.querySelector(".copy");
+        const facebookBtn = document.querySelector(".facebook");
+
+        // Random quote function
+function randomeQuote(){
+    quoteBtn.classList.add("loading");
+    quoteBtn.innerHTML = "Loading...";
+    // fetching randome quotes/data from API
+    fetch("https://api.quotable.io/random").then(res => res.json()).then(result =>{
+        console.log(result);
+        quoteText.innerHTML=result.content;
+        quoteAuthor.innerHTML=result.author;
+        quoteBtn.innerHTML= "Generate New Quote"
+    })
+}
+
+soundBtn.addEventListener("click", ()=>{
+    let utterance = new SpeechSynthesisUtterance(`${quoteText.innerHTML} by ${quoteAuthor.innerHTML}`);
+    speechSynthesis.speak(utterance);
+})
+copyBtn.addEventListener("click", ()=>{
+  navigator.clipboard.writeText(quoteText.innerHTML)
+})
+facebookBtn.addEventListener("click", () => {
+    let facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+    window.open(facebookUrl, "_blank");
+});
+
+        quoteBtn.addEventListener("click", randomeQuote);
+    </script>
+</body>
+</html>
